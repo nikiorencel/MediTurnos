@@ -23,7 +23,7 @@ MediTurnos es un sistema de gestión de turnos e historias clínicas para médic
 - Un paciente no puede reservar dos turnos en el mismo horario.
 - Un médico no puede tener más de un turno asignado en el mismo horario.
 - Los turnos solo pueden reservarse en horarios disponibles del médico.
-- Un paciente puede cancelar un turno hasta 24 horas antes de la consulta.
+- Un paciente puede cancelar el turno hasta el horario de la consulta.
 - Los turnos puede tener los siguientes estados: confirmado, cancelado y realizado.
 ### Historias Clínicas
 - Cada paciente posee una única historia clínica.
