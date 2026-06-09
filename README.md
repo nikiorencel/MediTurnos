@@ -1,6 +1,6 @@
 # MediTurnos - Sistema de gestión de turnos
 ## Descripción del proyecto
-MediTurnos es un sistema de gestión de turnos e historias clínicas para médicos y pacientes.
+MediTurnos es una plataforma web diseñada para optimizar la gestión de turnos médicos e historias clínicas, permitiendo a los pacientes reservar consultas de forma sencilla y a los médicos acceder y actualizar la información clínica de sus pacientes desde un único sistema centralizado.
 ### Problemas que resuelve
  - **Gestión de turnos:** Centralizala reserva y administración de turnos médicos.
  - **Acceso a historias clínicas:** Permite consultar y actualizar la información de los pacientes.
