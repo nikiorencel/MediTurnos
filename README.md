@@ -13,6 +13,7 @@ MediTurnos es un sistema de gestión de turnos e historias clínicas para médic
 - Ver sus turnos programados.
 - Cancelar turno.
 ### Médico
+- Registrarse e iniciar sesión.
 - Ver turnos del día.
 - Buscar pacientes por nombre.
 - Consultar historias clínicas.
