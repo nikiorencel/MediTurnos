@@ -45,4 +45,3 @@ MediTurnos es una plataforma web diseñada para optimizar la gestión de turnos 
 ## Tech Stack
 ## Ejecución
 ## Estructura de Datos
->>>>>>> 23e4db18b81ac0c8ed425b2cf09214d5f5cf875d
