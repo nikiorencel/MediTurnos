@@ -1,3 +1,19 @@
+<script setup>
+import { computed } from 'vue'
+import { RouterLink, useRouter } from 'vue-router'
+
+
+const router = useRouter()
+//const { token, usuario, isAuthenticated, isAdmin: isAdminFn, logout } = useAuth()
+
+//const isAuth = computed(() => isAuthenticated())
+//const isAdmin = computed(() => isAdminFn())
+
+const handleLogout = () => {
+  logout()
+  router.push('/')
+}
+</script>
 <template>
   <nav>
     <RouterLink to="/">Inicio</RouterLink>
@@ -23,26 +39,14 @@
           Registrarse
         </RouterLink>
       </template>
+    <button @click="storeAuth, logout" class="logout-btn">
+      Cerrar Sesión
+    </button>
     </div>
   </nav>
 </template>
 
-<script setup>
-import { computed } from 'vue'
-import { RouterLink, useRouter } from 'vue-router'
-import { useAuth } from '../composables/useAuth'
 
-const router = useRouter()
-const { token, usuario, isAuthenticated, isAdmin: isAdminFn, logout } = useAuth()
-
-const isAuth = computed(() => isAuthenticated())
-const isAdmin = computed(() => isAdminFn())
-
-const handleLogout = () => {
-  logout()
-  router.push('/')
-}
-</script>
 
 <style scoped>
 nav {

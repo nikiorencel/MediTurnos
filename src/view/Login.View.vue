@@ -35,11 +35,7 @@
         </div>
       </form>
 
-      <div class="login-info">
-        <p><strong>Cuentas de prueba:</strong></p>
-        <p>Admin: admin@biblioteca.com / admin123</p>
-        <p>Usuario: user@biblioteca.com / user123</p>
-      </div>
+     
 
       <p class="register-link">
         ¿No tenés cuenta? <router-link to="/register">Registrate</router-link>
