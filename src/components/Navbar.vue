@@ -1,54 +1,60 @@
 <script setup>
 import { computed } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
-
+// ✔️ Corregido: Importamos el store con el nombre correcto de tu archivo
+import useAuthStore from '../store/useAuth'
 
 const router = useRouter()
-//const { token, usuario, isAuthenticated, isAdmin: isAdminFn, logout } = useAuth()
+const authStore = useAuthStore()
 
-//const isAuth = computed(() => isAuthenticated())
-//const isAdmin = computed(() => isAdminFn())
 
-const handleLogout = () => {
-  logout()
-  router.push('/')
+const isAuth = computed(() => authStore.isAuthenticated)
+const userEmail = computed(() => authStore.user?.email)
+
+const isAdmin = computed(() => {
+  return authStore.user?.user_metadata?.role === 'admin' || authStore.user?.role === 'admin'
+})
+
+const handleLogout = async () => {
+  try {
+    await authStore.signOut() 
+    router.push('/')         
+  } catch (error) {
+    console.error("Error al cerrar sesión:", error.message)
+  }
 }
 </script>
+
 <template>
   <nav>
     <RouterLink to="/">Inicio</RouterLink>
     
-
     <div class="auth-section">
       <template v-if="isAuth">
         <RouterLink v-if="isAdmin" to="/admin" class="admin-link">
           Admin
         </RouterLink>
+        
         <span class="user-greeting">
-          Hola, {{ usuario?.email }}
+          Hola, {{ userEmail }}
         </span>
+        
         <button @click="handleLogout" class="logout-btn">
           Cerrar Sesión
         </button>
       </template>
+
       <template v-else>
         <RouterLink to="/login" class="nav-link">
           Iniciar Sesión
         </RouterLink>
-        <RouterLink to="/register" class="nav-link">
-          Registrarse
-        </RouterLink>
       </template>
-    <button @click="storeAuth, logout" class="logout-btn">
-      Cerrar Sesión
-    </button>
     </div>
   </nav>
 </template>
 
-
-
 <style scoped>
+
 nav {
   display: flex;
   justify-content: flex-start; 
@@ -61,7 +67,6 @@ nav {
   font-family: 'Inter', -apple-system, sans-serif;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02); 
 }
-
 
 nav a {
   color: #64748b; 
@@ -78,13 +83,11 @@ nav a:hover {
   color: #1e293b;
 }
 
-
 nav a.router-link-active {
   background-color: #f0f9ff;
   color: #0ea5e9; 
   font-weight: 600;
 }
-
 
 .auth-section {
   margin-left: auto;
@@ -93,7 +96,6 @@ nav a.router-link-active {
   align-items: center;
 }
 
-
 .nav-link {
   font-size: 0.9rem;
   font-weight: 600;
@@ -101,7 +103,6 @@ nav a.router-link-active {
   border-radius: 8px;
   transition: all 0.2s ease;
 }
-
 
 .auth-section .nav-link[href="/login"] {
   background-color: transparent;
@@ -113,18 +114,6 @@ nav a.router-link-active {
   background-color: #f0f9ff;
 }
 
-.auth-section .nav-link[href="/register"] {
-  background-color: #0ea5e9; 
-  color: #ffffff;
-  box-shadow: 0 4px 6px -1px rgba(14, 165, 233, 0.15);
-}
-
-.auth-section .nav-link[href="/register"]:hover {
-  background-color: #0284c7;
-  box-shadow: 0 4px 12px -1px rgba(14, 165, 233, 0.25);
-}
-
-/* 👑 Panel de Administrador */
 .admin-link {
   font-weight: 600;
   color: #0f766e !important; 
@@ -136,7 +125,6 @@ nav a.router-link-active {
   background-color: #e6fffa !important;
 }
 
-/* 👤 Saludo al Usuario Conectado */
 .user-greeting {
   color: #475569;
   font-size: 0.9rem;
@@ -147,7 +135,6 @@ nav a.router-link-active {
   border-radius: 6px;
 }
 
-/* 🚪 Botón Cerrar Sesión */
 .logout-btn {
   background-color: #ffffff;
   border: 1px solid #cbd5e1;

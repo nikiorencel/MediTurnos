@@ -1,9 +1,47 @@
+<script setup>
+import { ref } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
+import useAuthStore from '../store/useAuth'
+
+const authStore = useAuthStore()
+const router = useRouter()
+const route = useRoute()
+
+
+
+const email = ref('')
+const password = ref('')
+const isLogin = ref(true)
+const error = ref('')
+
+function toggleMode() {
+  isLogin.value = !isLogin.value
+  error.value = ''
+}
+
+async function handlesubmit() {
+  error.value = ''
+  try {
+    if (isLogin.value) {
+      await authStore.signIn({ email: email.value, password: password.value })
+    } else {
+      await authStore.signUp({ email: email.value, password: password.value })
+    }
+
+    const redirect = route.query.redirect || '/'
+    router.push(redirect)
+  } catch (err) {
+    error.value = err.message
+  }
+}
+</script>
+
 <template>
   <div class="login-page">
     <div class="login-container">
-      <h1>Iniciar Sesión</h1>
+      <h1>{{ isLogin ? 'Iniciar Sesión' : 'Registrarse' }}</h1>
 
-      <form @submit.prevent="handleLogin" class="login-form">
+      <form @submit.prevent="handlesubmit" class="login-form">
         <div class="form-group">
           <label for="email">Email</label>
           <input
@@ -26,8 +64,8 @@
           />
         </div>
 
-        <button type="submit" :disabled="loading" class="login-btn">
-          {{ loading ? 'Iniciando...' : 'Iniciar Sesión' }}
+        <button type="submit" :disabled="authStore.loading" class="login-btn">
+          {{ authStore.loading ? 'Procesando...' : isLogin ? 'Iniciar Sesión' : 'Registrarse' }}
         </button>
 
         <div v-if="error" class="error-message">
@@ -35,52 +73,16 @@
         </div>
       </form>
 
-     
-
       <p class="register-link">
-        ¿No tenés cuenta? <router-link to="/register">Registrate</router-link>
+        <a href="#" @click.prevent="toggleMode">
+          {{ isLogin ? '¿No tenés cuenta? Registrate' : '¿Ya tenés cuenta? Iniciá sesión' }}
+        </a>
       </p>
     </div>
   </div>
 </template>
 
-<script setup>
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-import { useAuth } from '../composables/useAuth'
-
-const router = useRouter()
-const { login } = useAuth()
-
-const email = ref('')
-const password = ref('')
-const loading = ref(false)
-const error = ref('')
-
-const handleLogin = async () => {
-  loading.value = true
-  error.value = ''
-
-  setTimeout(() => {
-    const resultado = login({ email: email.value, password: password.value })
-
-    if (resultado.success) {
-      if (resultado.usuario.rol === 'admin') {
-        router.push('/admin')
-      } else {
-        router.push('/')
-      }
-    } else {
-      error.value = resultado.error
-    }
-
-    loading.value = false
-  }, 500)
-}
-</script>
-
 <style scoped>
-
 .login-page {
   display: flex;
   justify-content: center;
@@ -90,8 +92,6 @@ const handleLogin = async () => {
   background-color: #f8fafc; 
   font-family: 'Inter', -apple-system, sans-serif;
 }
-
-
 .login-container {
   background: #ffffff; 
   border: 1px solid #e2e8f0; 
@@ -102,8 +102,6 @@ const handleLogin = async () => {
   box-shadow: 0 10px 25px -5px rgba(14, 165, 233, 0.05); 
   box-sizing: border-box;
 }
-
-
 h1 {
   text-align: left; 
   margin-bottom: 2rem;
@@ -113,7 +111,6 @@ h1 {
   position: relative;
   padding-left: 15px;
 }
-
 h1::before {
   content: "";
   position: absolute;
@@ -124,12 +121,9 @@ h1::before {
   background-color: #0ea5e9; 
   border-radius: 2px;
 }
-
-
 .form-group {
   margin-bottom: 1.5rem;
 }
-
 .form-group label {
   display: block;
   margin-bottom: 0.5rem;
@@ -138,7 +132,6 @@ h1::before {
   color: #1e293b;
   text-align: left;
 }
-
 .form-group input {
   width: 100%;
   padding: 0.75rem 1rem;
@@ -150,16 +143,12 @@ h1::before {
   box-sizing: border-box;
   transition: all 0.2s ease;
 }
-
-
 .form-group input:focus {
   outline: none;
   border-color: #0ea5e9;
   background-color: #ffffff;
   box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.1);
 }
-
-
 .login-btn {
   width: 100%;
   padding: 0.85rem;
@@ -175,18 +164,14 @@ h1::before {
   transition: all 0.2s ease;
   box-shadow: 0 4px 6px -1px rgba(14, 165, 233, 0.15);
 }
-
 .login-btn:hover:not(:disabled) {
   background: #0284c7;
   box-shadow: 0 4px 12px -1px rgba(14, 165, 233, 0.25);
 }
-
 .login-btn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
-
-
 .error-message {
   background: #fef2f2; 
   color: #dc2626;
@@ -198,40 +183,18 @@ h1::before {
   font-weight: 500;
   margin-bottom: 1.5rem;
 }
-
-
-.login-info {
-  background: #f0f9ff; 
-  border: 1px solid #e0f2fe;
-  padding: 1rem;
-  border-radius: 8px;
-  margin-bottom: 1.5rem;
-  text-align: left;
-  font-size: 0.85rem;
-  color: #0369a1;
-  line-height: 1.5;
-}
-
-.login-info p strong {
-  color: #0284c7;
-  font-weight: 700;
-}
-
-
 .register-link {
   text-align: center;
   font-size: 0.9rem;
   color: #64748b;
   margin-top: 1rem;
 }
-
 .register-link a {
   color: #0ea5e9;
   text-decoration: none;
   font-weight: 600;
   transition: color 0.2s ease;
 }
-
 .register-link a:hover {
   color: #0284c7;
   text-decoration: underline;

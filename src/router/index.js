@@ -10,7 +10,7 @@ const routes = [
   {
     path: '/login',
     name: 'Login',
-    // ✔️ C
+   
     component: () => import('../view/Login.View.vue') 
   },
     {
@@ -22,6 +22,12 @@ const routes = [
     path: '/:pathMatch(.*)*',
     name: 'NotFound',
     component: () => import('../view/NotFound.View.vue')
+    },
+   {
+    path: '/usuario',
+    name: 'Usuario',
+    component: () => import('../view/Usuario.View.vue'),
+    meta: { requiresAuth: true }
   }
 ]
 
