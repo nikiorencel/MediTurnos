@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from '../view/Home.View.vue'
 
+import useAuthStore from '../store/useAuth'
 const routes = [
   {
     path: '/',
@@ -10,24 +11,25 @@ const routes = [
   {
     path: '/login',
     name: 'Login',
-   
     component: () => import('../view/Login.View.vue') 
   },
-    {
-        path: '/register',
-        name: 'Register',
-        component: () => import('../view/Register.View.vue')
-    },
+  
+  {
+    path: '/usuario',
+    name: 'Usuario',
+    component: () => import('../view/Usuario.View.vue'),
+    meta: { requiresAuth: true } 
+  },
+  {
+    path: '/admin',
+    name: 'Admin',
+    component: () => import('../view/Admin.View.vue'),
+    meta: { requiresAuth: true, requiresAdmin: true } 
+  },
   {
     path: '/:pathMatch(.*)*',
     name: 'NotFound',
     component: () => import('../view/NotFound.View.vue')
-    },
-   {
-    path: '/usuario',
-    name: 'Usuario',
-    component: () => import('../view/Usuario.View.vue'),
-    meta: { requiresAuth: true }
   }
 ]
 
@@ -36,12 +38,22 @@ const router = createRouter({
   routes
 })
 
+//
 router.beforeEach((to, from, next) => {
-  const token = localStorage.getItem('token')
-  if (to.meta.requiresAuth && !token) {
+  const authStore = useAuthStore()
+  const isAuth = authStore.isAuthenticated
+  const isAdmin = authStore.user?.user_metadata?.role === 'admin'
+
+ 
+  if (to.meta.requiresAuth && !isAuth) {
     next('/login')
-  } else {
-    next()
+  } 
+  
+  else if (to.meta.requiresAdmin && !isAdmin) {
+    next('/usuario') 
+  } 
+  else {
+    next() 
   }
 })
 

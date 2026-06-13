@@ -1,5 +1,5 @@
 <script setup>
-import useAuthStore from '../store/authStore'
+import useAuthStore from '../store/useAuth'
 const authStore = useAuthStore()
 </script>
 

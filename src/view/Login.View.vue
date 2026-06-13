@@ -7,8 +7,6 @@ const authStore = useAuthStore()
 const router = useRouter()
 const route = useRoute()
 
-
-
 const email = ref('')
 const password = ref('')
 const isLogin = ref(true)
@@ -23,13 +21,24 @@ async function handlesubmit() {
   error.value = ''
   try {
     if (isLogin.value) {
+     
       await authStore.signIn({ email: email.value, password: password.value })
-    } else {
-      await authStore.signUp({ email: email.value, password: password.value })
-    }
+      
+     
+      const isAdmin = authStore.user?.user_metadata?.role === 'admin'
+      
+      
+      if (isAdmin) {
+        router.push('/admin')
+      } else {
+        router.push('/usuario')
+      }
 
-    const redirect = route.query.redirect || '/'
-    router.push(redirect)
+    } else {
+      
+      await authStore.signUp({ email: email.value, password: password.value })
+      router.push('/usuario')
+    }
   } catch (err) {
     error.value = err.message
   }
@@ -83,6 +92,7 @@ async function handlesubmit() {
 </template>
 
 <style scoped>
+
 .login-page {
   display: flex;
   justify-content: center;

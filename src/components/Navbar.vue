@@ -1,7 +1,7 @@
 <script setup>
 import { computed } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
-// ✔️ Corregido: Importamos el store con el nombre correcto de tu archivo
+
 import useAuthStore from '../store/useAuth'
 
 const router = useRouter()
