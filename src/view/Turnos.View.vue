@@ -4,7 +4,15 @@ import { ref } from 'vue'
 const fecha = ref('')
 
 function solicitarTurno() {
-    console.log(fecha.value)
+    await supabase
+    .from('turnos')
+    .insert([
+        {
+            paciente_id: authStore.user.id,
+            fecha: fecha.value,
+            estado: 'pendiente'
+        }
+    ])
 }
 </script>
 
