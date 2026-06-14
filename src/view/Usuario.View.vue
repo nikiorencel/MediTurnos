@@ -16,33 +16,45 @@ async function logout() {
     <h1>Perfil del Usuario</h1>
     <p>Bienvenido, {{ authStore.user?.email }}</p>
 
-    <router-link to="/turnos" class="btn-turno">
+  <div class="botones">
+  <RouterLink to="/turnos" class="btn-menu">
     Solicitar turno
-    </router-link>
-    <br><br>
+  </RouterLink>
 
+  <RouterLink to="/mis-turnos" class="btn-menu">
+    Ver mis turnos
+  </RouterLink>
+</div>
   </div>
 </template>
 
 <style scoped>
-.btn-turno {
-  display: inline-block;
-  margin-top: 15px;
-  padding: 12px 24px;
+.botones {
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+  margin-top: 30px;
+}
 
-  background-color: #0ea5e9;
+.btn-menu {
+  display: inline-block;
+  width: 220px;
+  padding: 14px 28px;
+
+  background-color: #10b981;
   color: white;
   text-decoration: none;
 
-  border-radius: 10px;
+  border-radius: 12px;
   font-size: 18px;
   font-weight: 600;
+  text-align: center;
 
   transition: 0.2s;
 }
 
-.btn-turno:hover {
-  background-color: #0284c7;
+.btn-menu:hover {
+  background-color: #059669;
   transform: translateY(-2px);
 }
 </style>
