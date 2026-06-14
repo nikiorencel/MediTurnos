@@ -30,7 +30,13 @@ const routes = [
     path: '/:pathMatch(.*)*',
     name: 'NotFound',
     component: () => import('../view/NotFound.View.vue')
-  }
+  },
+{
+  path: '/turnos',
+  name: 'Turnos',
+  component: () => import('../view/Turnos.View.vue'),
+  meta: { requiresAuth: true }
+},
 ]
 
 const router = createRouter({
