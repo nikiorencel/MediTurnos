@@ -2,16 +2,17 @@
 import { ref } from 'vue'
 import { supabase } from '../service/supabaseClient'
 import useAuthStore from '../store/useAuth'
-
+import { computed } from 'vue'
 const authStore = useAuthStore()
 
-// Variables reactivas para el formulario
 const fecha = ref('')
 const hora = ref('')
 const especialidadSeleccionada = ref('')
 const mensaje = ref('')
+const medicos = ref([])
+const medicoSeleccionado = ref('')
+const hoy = new Date().toISOString().split('T')[0]
 
-// Listado estático de especialidades
 const especialidades = [
   'Cardiología',
   'Pediatría',
@@ -20,6 +21,26 @@ const especialidades = [
   'Dermatología',
   'Neurología'
 ]
+
+const horariosDisponibles = computed(() => {
+ 
+  if (!fecha.value) {
+    return horarios
+  }
+
+  const hoy = new Date().toISOString().split('T')[0]
+
+  if (fecha.value !== hoy) {
+    return horarios
+  }
+
+  const horaActual = new Date().getHours()
+
+  return horarios.filter(hora => {
+    const horaTurno = parseInt(hora.split(':')[0])
+    return horaTurno > horaActual
+  })
+})
 
 const horarios = [
   '09:00',
@@ -34,15 +55,30 @@ const horarios = [
   '18:00'
 ]
 
+async function cargarMedicos() {
+
+  console.log("Especialidad:", especialidadSeleccionada.value)
+
+  const { data, error } = await supabase
+    .from('medicos')
+    .select('*')
+    .eq('especialidad', especialidadSeleccionada.value)
+
+  console.log("Data:", data)
+  console.log("Error:", error)
+
+  if (!error) {
+    medicos.value = data
+  }
+}
+
 async function solicitarTurno() {
-  // Validación para que no manden campos vacíos
   if (!fecha.value || !hora.value || !especialidadSeleccionada.value) {
     mensaje.value = 'Por favor, completa todos los campos.'
     setTimeout(() => { mensaje.value = '' }, 3000)
     return
   }
 
-  // Hacemos un ÚNICO llamado limpio a Supabase
   const { data, error } = await supabase
     .from('turnos')
     .insert([
@@ -50,20 +86,17 @@ async function solicitarTurno() {
         paciente_id: authStore.user.id,
         fecha: fecha.value,
         hora: hora.value,
-        especialidad: especialidadSeleccionada.value, // Asegurate que en tu base se llame "especialidad"
+        especialidad: especialidadSeleccionada.value, 
+        medico_id: medicoSeleccionado.value,
         estado: 'pendiente'
       }
     ])
-
-  console.log("DATA:", data)
-  console.log("ERROR:", error)
 
   if (error) {
     mensaje.value = 'Error al reservar el turno'
   } else {
     mensaje.value = 'Turno reservado correctamente'
     
-    // Limpiamos los inputs si salió todo bien
     fecha.value = ''
     hora.value = ''
     especialidadSeleccionada.value = ''
@@ -72,7 +105,7 @@ async function solicitarTurno() {
   setTimeout(() => {
     mensaje.value = ''
   }, 3000)
-} // 👈 Ahora la función se cierra donde corresponde de forma correcta
+} 
 </script>
 
 <template>
@@ -80,35 +113,72 @@ async function solicitarTurno() {
     <h1>Solicitar turno</h1>
 
     <h3>1. Seleccioná la Especialidad</h3>
-    <select v-model="especialidadSeleccionada" class="formulario-select">
-      <option disabled value="">Elegí una especialidad</option>
-      <option 
-        v-for="esp in especialidades" 
-        :key="esp" 
-        :value="esp"
-      >
-        {{ esp }}
-      </option>
-    </select>
+<select
+  v-model="especialidadSeleccionada"
+  class="formulario-select"
+  @change="cargarMedicos"
+>
+  <option disabled value="">Elegí una especialidad</option>
 
-    <h3>2. Seleccioná una Fecha</h3>
-    <input
-      type="date"
-      v-model="fecha"
-      class="fecha-input"
-    />
+  <option
+    v-for="esp in especialidades"
+    :key="esp"
+    :value="esp"
+  >
+    {{ esp }}
+  </option>
+</select>
 
-    <h3>3. Seleccioná un Horario</h3>
-    <select v-model="hora" class="formulario-select">
-      <option disabled value="">Elegí una hora</option>
-      <option
-        v-for="h in horarios"
-        :key="h"
-        :value="h"
-      >
-        {{ h }}
-      </option>
-    </select>
+<div v-if="medicos.length > 0">
+
+  <h3>2. Seleccioná un médico</h3>
+
+  <select
+    v-model="medicoSeleccionado"
+    class="formulario-select"
+  >
+    <option disabled value="">
+      Elegí un médico
+    </option>
+
+    <option
+      v-for="medico in medicos"
+      :key="medico.id"
+      :value="medico.id"
+    >
+      {{ medico.nombre }} {{ medico.apellido }}
+    </option>
+  </select>
+
+</div>
+
+<h3>3. Seleccioná una Fecha</h3>
+
+<input
+  type="date"
+  v-model="fecha"
+  :min="hoy"
+  class="fecha-input"
+/>
+
+<h3>4. Seleccioná un Horario</h3>
+
+<select
+  v-model="hora"
+  class="formulario-select"
+>
+  <option disabled value="">
+    Elegí una hora
+  </option>
+
+<option
+  v-for="h in horariosDisponibles"
+  :key="h"
+  :value="h"
+>
+  {{ h }}
+</option>
+</select>
 
     <button
       @click="solicitarTurno"

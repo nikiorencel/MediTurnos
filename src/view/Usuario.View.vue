@@ -9,21 +9,28 @@ const router = useRouter()
 const nombreCompleto = ref('')
 
 onMounted(async () => {
+
+  const { data: medico } = await supabase
+    .from('medicos')
+    .select('*')
+    .eq('user_id', authStore.user.id)
+
+  esMedico.value = medico && medico.length > 0
+
   const tabla = esMedico.value ? 'medicos' : 'pacientes'
+
   const { data } = await supabase
     .from(tabla)
     .select('nombre, apellido')
     .eq('user_id', authStore.user.id)
     .single()
+
   if (data?.nombre) {
     nombreCompleto.value = `${data.nombre} ${data.apellido}`
   }
 })
 
-const esMedico = computed(() =>
-  authStore.user?.user_metadata?.role === 'medico' ||
-  authStore.user?.user_metadata?.role === 'admin'
-)
+const esMedico = ref(false)
 </script>
 
 <template>

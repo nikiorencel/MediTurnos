@@ -19,21 +19,35 @@ const guardandoHC = ref(false)
 const hoy = new Date().toISOString().split('T')[0]
 
 async function cargarTurnos() {
+
   cargando.value = true
+
+  const { data: medico } = await supabase
+    .from('medicos')
+    .select('id')
+    .eq('user_id', authStore.user.id)
+    .single()
+
+  const medicoId = medico.id
+
   const { data: hoyData } = await supabase
     .from('turnos')
     .select('*')
+    .eq('medico_id', medicoId)
     .eq('fecha', hoy)
     .neq('estado', 'cancelado')
     .order('hora')
+
   turnosHoy.value = await enriquecerConPaciente(hoyData || [])
 
   const { data: todosData } = await supabase
     .from('turnos')
     .select('*')
+    .eq('medico_id', medicoId)
     .gte('fecha', hoy)
     .order('fecha')
     .order('hora')
+
   todosTurnos.value = await enriquecerConPaciente(todosData || [])
 
   cargando.value = false

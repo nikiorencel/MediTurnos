@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import useAuthStore from '../store/useAuth'
+import { supabase } from '../service/supabaseClient'
 
 const authStore = useAuthStore()
 const router = useRouter()
@@ -19,26 +20,47 @@ function toggleMode() {
 
 async function handlesubmit() {
   error.value = ''
+
   try {
     if (isLogin.value) {
-     
-      await authStore.signIn({ email: email.value, password: password.value })
-      
-     
+
+      await authStore.signIn({
+        email: email.value,
+        password: password.value
+      })
+
       const isAdmin = authStore.user?.user_metadata?.role === 'admin'
-      
-      
+
+      console.log(authStore.user.id)
+
+      const { data: medico, error } = await supabase
+        .from('medicos')
+        .select('*')
+        .eq('user_id', authStore.user.id)
+
+      console.log('Medico:', medico)
+      console.log('Error:', error)
+
       if (isAdmin) {
         router.push('/admin')
-      } else {
+      }
+      else if (medico && medico.length > 0) {
+        router.push('/medico')
+      }
+      else {
         router.push('/usuario')
       }
 
     } else {
-      
-      await authStore.signUp({ email: email.value, password: password.value })
+
+      await authStore.signUp({
+        email: email.value,
+        password: password.value
+      })
+
       router.push('/usuario')
     }
+
   } catch (err) {
     error.value = err.message
   }

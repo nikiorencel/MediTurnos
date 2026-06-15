@@ -1,16 +1,33 @@
 <script setup>
-import { computed } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
 import useAuthStore from '../store/useAuth'
+import { computed, ref, onMounted } from 'vue'
+import { supabase } from '../service/supabaseClient'
 
 const router = useRouter()
 const authStore = useAuthStore()
 
 const isAuth = computed(() => authStore.isAuthenticated)
 const userEmail = computed(() => authStore.user?.email)
-const role = computed(() => authStore.user?.user_metadata?.role)
-const isAdmin = computed(() => role.value === 'admin')
-const isMedico = computed(() => role.value === 'medico' || isAdmin.value)
+const isAdmin = computed(() =>
+  authStore.user?.user_metadata?.role === 'admin'
+)
+
+const isMedico = ref(false)
+
+onMounted(async () => {
+
+  if (!authStore.user) return
+const { data, error } = await supabase
+  .from('medicos')
+  .select('id')
+  .eq('user_id', authStore.user.id)
+
+console.log('Medico encontrado:', data)
+
+isMedico.value = data?.length > 0
+
+})
 
 const handleLogout = async () => {
   try {
@@ -27,7 +44,7 @@ const handleLogout = async () => {
     <router-link :to="authStore.isAuthenticated ? '/usuario' : '/'">Inicio</router-link>
 
     <template v-if="isAuth">
-      <RouterLink v-if="isMedico" to="/medico" class="nav-link">📅 Turnos</RouterLink>
+      <RouterLink v-if="isMedico || isAdmin" to="/medico" class="nav-link">📅 Turnos</RouterLink>
       <template v-else>
         <RouterLink to="/turnos" class="nav-link">Solicitar turno</RouterLink>
         <RouterLink to="/mis-turnos" class="nav-link">Mis turnos</RouterLink>
