@@ -1,60 +1,137 @@
 <script setup>
 import useAuthStore from '../store/useAuth'
 import { useRouter } from 'vue-router'
+import { computed } from 'vue'
 
 const authStore = useAuthStore()
 const router = useRouter()
 
-async function logout() {
-  await authStore.signOut()
-  router.push('/login')
-}
+const esMedico = computed(() =>
+  authStore.user?.user_metadata?.role === 'medico' ||
+  authStore.user?.user_metadata?.role === 'admin'
+)
 </script>
 
 <template>
-  <div>
-    <h1>Perfil del Usuario</h1>
-    <p>Bienvenido, {{ authStore.user?.email }}</p>
+  <div class="usuario-page">
+    <div class="bienvenida">
+      <h1>Bienvenido/a</h1>
+      <p class="email">{{ authStore.user?.email }}</p>
+      <span class="badge-rol">{{ esMedico ? '👨‍⚕️ Médico' : '🧑 Paciente' }}</span>
+    </div>
 
-  <div class="botones">
-  <RouterLink to="/turnos" class="btn-menu">
-    Solicitar turno
-  </RouterLink>
+    <div v-if="esMedico" class="seccion-panel">
+      <h2>Panel médico</h2>
+      <div class="botones">
+        <RouterLink to="/medico" class="btn-menu btn-primario">📅 Ver turnos</RouterLink>
+        <RouterLink to="/perfil" class="btn-menu btn-secundario">👤 Mis datos</RouterLink>
+      </div>
+    </div>
 
-  <RouterLink to="/mis-turnos" class="btn-menu">
-    Ver mis turnos
-  </RouterLink>
-</div>
+    <div v-else class="seccion-panel">
+      <h2>Mis turnos</h2>
+      <div class="botones">
+        <RouterLink to="/turnos" class="btn-menu btn-primario">➕ Solicitar turno</RouterLink>
+        <RouterLink to="/mis-turnos" class="btn-menu btn-secundario">📋 Ver mis turnos</RouterLink>
+        <RouterLink to="/perfil" class="btn-menu btn-secundario">👤 Mis datos</RouterLink>
+      </div>
+    </div>
   </div>
 </template>
 
 <style scoped>
+.usuario-page {
+  max-width: 600px;
+  margin: 3rem auto;
+  padding: 0 1rem;
+  font-family: 'Inter', -apple-system, sans-serif;
+}
+
+.bienvenida {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 0.3rem;
+}
+
+.email {
+  color: #64748b;
+  font-size: 0.95rem;
+  margin-bottom: 0.75rem;
+}
+
+.badge-rol {
+  display: inline-block;
+  background: #f0f9ff;
+  color: #0369a1;
+  border: 1px solid #bae6fd;
+  padding: 0.3rem 1rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.seccion-panel {
+  background: white;
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+  border: 1px solid #e2e8f0;
+}
+
+.seccion-panel h2 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #475569;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
 .botones {
   display: flex;
-  justify-content: center;
-  gap: 25px;
-  margin-top: 30px;
+  flex-direction: column;
+  gap: 0.85rem;
 }
 
 .btn-menu {
-  display: inline-block;
-  width: 220px;
-  padding: 14px 28px;
-
-  background-color: #10b981;
-  color: white;
-  text-decoration: none;
-
-  border-radius: 12px;
-  font-size: 18px;
+  display: block;
+  width: 100%;
+  padding: 1rem 1.5rem;
+  border-radius: 10px;
+  font-size: 1rem;
   font-weight: 600;
   text-align: center;
-
-  transition: 0.2s;
+  text-decoration: none;
+  transition: all 0.2s;
+  box-sizing: border-box;
 }
 
-.btn-menu:hover {
-  background-color: #059669;
-  transform: translateY(-2px);
+.btn-primario {
+  background-color: #0ea5e9;
+  color: white;
+}
+
+.btn-primario:hover {
+  background-color: #0284c7;
+  transform: translateY(-1px);
+}
+
+.btn-secundario {
+  background-color: #f8fafc;
+  color: #334155;
+  border: 1px solid #e2e8f0;
+}
+
+.btn-secundario:hover {
+  background-color: #f1f5f9;
+  transform: translateY(-1px);
 }
 </style>
