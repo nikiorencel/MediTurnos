@@ -1,10 +1,24 @@
 <script setup>
 import useAuthStore from '../store/useAuth'
 import { useRouter } from 'vue-router'
-import { computed } from 'vue'
+import { computed, ref, onMounted  } from 'vue'
+import { supabase } from '../service/supabaseClient'
 
 const authStore = useAuthStore()
 const router = useRouter()
+const nombreCompleto = ref('')
+
+onMounted(async () => {
+  const tabla = esMedico.value ? 'medicos' : 'pacientes'
+  const { data } = await supabase
+    .from(tabla)
+    .select('nombre, apellido')
+    .eq('user_id', authStore.user.id)
+    .single()
+  if (data?.nombre) {
+    nombreCompleto.value = `${data.nombre} ${data.apellido}`
+  }
+})
 
 const esMedico = computed(() =>
   authStore.user?.user_metadata?.role === 'medico' ||
@@ -16,7 +30,7 @@ const esMedico = computed(() =>
   <div class="usuario-page">
     <div class="bienvenida">
       <h1>Bienvenido/a</h1>
-      <p class="email">{{ authStore.user?.email }}</p>
+     <p class="email">{{ nombreCompleto || authStore.user?.email }}</p>
       <span class="badge-rol">{{ esMedico ? '👨‍⚕️ Médico' : '🧑 Paciente' }}</span>
     </div>
 
