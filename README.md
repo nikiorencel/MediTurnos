@@ -45,6 +45,32 @@ MediTurnos es una plataforma web diseñada para optimizar la gestión de turnos 
 - Email: paciente@gmail.com (paciente)
 - Email: medicoprueba@gmail.com (medico)
 - Contraseña: 123456
+#### Registro
+Nuevo usuario se crea con rol "paciente" por defecto.
+### 2. Solicitud de Turnos
+1. Seleccionar fecha del turno
+2. Seleccionar horario disponible (9:00 a 18:00hs)
+3. Elegir especialidad
+4. Elegir médico
+5. Reservar turno
+6. Confirmación de reserva exitosa
+### 3. Mis Turnos
+1. Ver todos los turnos programados
+2. Visualizar fecha hora y estado del turno
+3. Cancelar turnos con confirmación previa
+4. Visualizar turnos cancelados
+### 4. Perfil de Usuario
+1. Ver información personal
+2. Modificar datos del perfil
+### 5. Agenda del Médico
+1. Ver turnos del día
+2. Ver próximos turnos programados
+3. Buscar pacientes
+4. Acceder a la historia clínica del paciente con posibilidad de modificarla
+### 6. Historia Clínica
+1. Visualizar historia clínica de un paciente
+2. Agregar nueva información
+3. Modificar información existente
 ## Configuración
 ### Variables del Entorno (.env)
 ```# Supabase```
@@ -57,7 +83,6 @@ VITE_SUPABASE_PUBLISHABLE_KEY=sb_publishable_XsDqUBtO73J8NWKWpujd6w_2Kv7hgO9
 - **Routing:** Vue Router
 - **State Management:** Pinia
 - **Backend:** Supabase
-- **AI:** Google Gemini AI
 - **Estilos:** CSS
 ## Ejecución
 ```# Instalar dependencias```
