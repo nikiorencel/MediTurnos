@@ -68,9 +68,12 @@ export default {
 }
 
 .hero-title {
-  font-size: 3rem;
-  font-weight: 700;
+  font-size: 4rem;
+  font-weight: 900;
   margin-bottom: 1rem;
+  color: #ffffff;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+  letter-spacing: 0.02em;
 }
 
 .hero-subtitle {
