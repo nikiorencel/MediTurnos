@@ -28,7 +28,7 @@
       <div class="service-card">
         <h3 class="card-title">Historia Clínica Digital</h3>
         <p class="card-text">Revisá tus recetas electrónicas, resultados de estudios y antecedentes desde cualquier dispositivo.</p>
-        <router-link to="/perfil" class="card-link">Ingresar al portal →</router-link>
+        <router-link to="/usuario" class="card-link">Ingresar al portal →</router-link>
       </div>
     </section>
   </div>
@@ -79,7 +79,7 @@ export default {
   line-height: 1.6;
 }
 
-/* Botón personalizado */
+
 .btn-primary {
   display: inline-block;
   background-color: #0dcaf0;
@@ -113,7 +113,7 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  border-top: 4px solid #0dcaf0; /* Detalle de color clínico */
+  border-top: 4px solid #0dcaf0;
 }
 
 .card-title {
