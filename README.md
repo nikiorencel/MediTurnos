@@ -44,6 +44,7 @@ MediTurnos es una plataforma web diseñada para optimizar la gestión de turnos 
 ### 1. Autenticación
 #### Login
 - Email: paciente@gmail.com (paciente)
+- Email: medicoprueba@gmail.com (medico)
 - Contraseña: 123456
 ## Configuración
 ### Variables del Entorno (.env)
