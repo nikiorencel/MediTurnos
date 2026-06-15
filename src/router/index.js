@@ -1,7 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from '../view/Home.View.vue'
-
+import TurnosProgramadosView from '../view/TurnosProgramados.View.vue'
 import useAuthStore from '../store/useAuth'
+
 const routes = [
   {
     path: '/',
@@ -30,7 +31,17 @@ const routes = [
     path: '/:pathMatch(.*)*',
     name: 'NotFound',
     component: () => import('../view/NotFound.View.vue')
-  }
+  },
+{
+  path: '/turnos',
+  name: 'Turnos',
+  component: () => import('../view/Turnos.View.vue'),
+  meta: { requiresAuth: true }
+},
+{
+  path: '/mis-turnos',
+  component: TurnosProgramadosView
+},
 ]
 
 const router = createRouter({

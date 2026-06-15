@@ -27,7 +27,9 @@ const handleLogout = async () => {
 
 <template>
   <nav>
-    <RouterLink to="/">Inicio</RouterLink>
+    <router-link :to="authStore.isAuthenticated ? '/usuario' : '/'">
+  Inicio
+</router-link>
     
     <div class="auth-section">
       <template v-if="isAuth">

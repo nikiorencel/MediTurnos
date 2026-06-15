@@ -41,7 +41,29 @@ MediTurnos es una plataforma web diseñada para optimizar la gestión de turnos 
 ## Arquitectura del Proyecto
 ## Flujo de Datos
 ## Guía de Funcionalidades
+### 1. Autenticación
+#### Login
+- Email: paciente@gmail.com (paciente)
+- Contraseña: 123456
 ## Configuración
+### Variables del Entorno (.env)
+```# Supabase```
+
+VITE_SUPABASE_URL=https://wyuhlglqdbgddbtdekpv.supabase.co
+VITE_SUPABASE_PUBLISHABLE_KEY=sb_publishable_XsDqUBtO73J8NWKWpujd6w_2Kv7hgO9
 ## Tech Stack
 ## Ejecución
+```# Instalar dependencias```
+
+npm install
+
+```# Ejecutar en desarrollo```
+
+npm run dev
+
+```# Build para produccion```
+
+npm run build
+
+Acceso  http://localhost:5175/
 ## Estructura de Datos
