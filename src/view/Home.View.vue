@@ -50,7 +50,7 @@
 </template>
 
 <script>
-// Importamos el JavaScript nativo de Bootstrap para manejar la animación
+
 import { Carousel } from 'bootstrap'
 
 export default {
@@ -60,17 +60,17 @@ export default {
     }
   },
   mounted() {
-    // Cuando el componente se monta en la pantalla, inicializamos el carrusel manualmente
+   
     const carouselElement = document.getElementById('carouselMediTurnos')
     if (carouselElement) {
       this.carouselInstance = new Carousel(carouselElement, {
-        interval: 4000, // Tiempo de cambio automático (4 segundos)
-        wrap: true      // Permite que al llegar al final vuelva a empezar
+        interval: 4000,
+        wrap: true     
       })
     }
   },
   unmounted() {
-    // Buena práctica: Destruimos la instancia al salir de la vista para liberar memoria
+   
     if (this.carouselInstance) {
       this.carouselInstance.dispose()
     }
