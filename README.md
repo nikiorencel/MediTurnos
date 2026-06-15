@@ -52,6 +52,13 @@ MediTurnos es una plataforma web diseñada para optimizar la gestión de turnos 
 VITE_SUPABASE_URL=https://wyuhlglqdbgddbtdekpv.supabase.co
 VITE_SUPABASE_PUBLISHABLE_KEY=sb_publishable_XsDqUBtO73J8NWKWpujd6w_2Kv7hgO9
 ## Tech Stack
+- **Frontend:** Vue.js 3
+- **Build Tool:** Vite
+- **Routing:** Vue Router
+- **State Management:** Pinia
+- **Backend:** Supabase
+- **AI:** Google Gemini AI
+- **Estilos:** CSS
 ## Ejecución
 ```# Instalar dependencias```
 
