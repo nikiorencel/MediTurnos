@@ -28,7 +28,6 @@ MediTurnos es una plataforma web diseñada para optimizar la gestión de turnos 
 ### Historias Clínicas
 - Cada paciente posee una única historia clínica.
 - Solo los médicos pueden agregar o modificar registros en una historia clínica.
-- Los pacientes pueden consultar su propia historia clínica, pero no modificarla.
 - Cada actualización de la historia clínica debe registrar fecha y médico responsable.
 ### Gestión de Pacientes
 - Un paciente debe estar registrado para solicitar o ver sus turnos.
