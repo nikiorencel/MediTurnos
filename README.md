@@ -79,10 +79,10 @@ MediTurnos es una plataforma web diseñada para optimizar la gestión de turnos 
 #### Registro
 Nuevo usuario se crea con rol "paciente" por defecto.
 ### 2. Solicitud de Turnos
-1. Seleccionar fecha del turno
-2. Seleccionar horario disponible (9:00 a 18:00hs)
-3. Elegir especialidad
-4. Elegir médico
+1. Elegir especialidadSeleccionar fecha del turno
+2. Elegir médico
+3. Seleccionar fecha del turno
+4. Seleccionar horario disponible (9:00 a 18:00hs)
 5. Reservar turno
 6. Confirmación de reserva exitosa
 ### 3. Mis Turnos
