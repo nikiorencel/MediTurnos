@@ -71,7 +71,6 @@ MediTurnos es una plataforma web diseñada para optimizar la gestión de turnos 
      └── NotFound.View.vue           # Página 404
  
 ```
-## Flujo de Datos
 ## Guía de Funcionalidades
 ### 1. Autenticación
 #### Login
