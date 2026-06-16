@@ -38,6 +38,39 @@ MediTurnos es una plataforma web diseñada para optimizar la gestión de turnos 
 - **Cancelado**: turno anulado por el paciente.
 - **Realizado**: consulta efectuada y registrada en la historia clínica.
 ## Arquitectura del Proyecto
+```text
+ src/
+ │
+ ├── assets/                     # Recursos estáticos
+ │
+ ├── components/                 # Componentes reutilizables
+ │   ├── Navbar.vue              # Barra de navegación
+ │   └── Footer/
+ │       └── Footer.vue          # Pie de página
+ │
+ ├── router/
+ │   └── index.js                # Configuración de rutas
+ │
+ ├── service/
+ │   └── supabaseClient.js       # Conexión con Supabase
+ │
+ ├── store/
+ │   └── useAuth.js              # Manejo del estado de autenticación (Pinia)
+ │
+ └── view/                       # Vistas principales
+     ├── Home.View.vue               # Página de inicio
+     ├── Login.View.vue              # Inicio de sesión y registro
+     ├── Usuario.View.vue            # Panel del paciente
+     ├── Medico.View.vue             # Panel del médico
+     ├── Admin.View.vue              # Panel del administrador
+     ├── Turnos.View.vue             # Solicitud de turnos
+     ├── TurnosProgramados.View.vue  # Turnos del paciente
+     ├── Perfil.View.vue             # Datos personales
+     ├── HistoriaClinica.View.vue    # Historias clínicas
+     ├── Especialidades.View.vue     # Especialidades médicas
+     └── NotFound.View.vue           # Página 404
+ 
+```
 ## Flujo de Datos
 ## Guía de Funcionalidades
 ### 1. Autenticación
@@ -99,3 +132,54 @@ npm run build
 
 Acceso  http://localhost:5175/
 ## Estructura de Datos
+### Paciente 
+```
+{
+  "id": "paciente-1",
+  "user_id": "uuid",
+  "nombre": "Daniel",
+  "apellido": "Prueba",
+  "dni": "23232332",
+  "telefono": "767514873",
+  "fecha_nacimiento": "1988-12-31",
+}
+```
+### Médico
+```
+{
+  "id": "medico-1",
+  "user_id": "uuid",
+  "nombre": "Laura",
+  "apellido": "Suarez",
+  "dni": "24548658",
+  "telefono": "1132548759",
+  "fecha_nacimiento": "1992-02-12",
+  "matricula": "1241236",
+  "especialidad": "Traumatología"
+}
+```
+### Turno
+```
+{
+  "id": "turno-1",
+  "paciente_id": "uuid",
+  "medico_id": "uuid",
+  "fecha": "2026-06-16",
+  "hora": "14:00",
+  "especialidad": "Cardiología",
+  "estado": "pendiente"
+}
+```
+### Historia Clínica
+```
+{
+  "id": "historia-1",
+  "paciente_id": "uuid",
+  "medico_id": "uuid",
+  "turno_id": "uuid",
+  "fecha": "2026-06-15",
+  "diagnostico": "Gordura",
+  "observaciones": "Paciente OK",
+  "pdf_url": null
+}
+```
