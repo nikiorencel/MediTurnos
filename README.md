@@ -20,7 +20,6 @@ MediTurnos es una plataforma web diseñada para optimizar la gestión de turnos 
 - Actualizar historias clínicas con observaciones y diagnósticos.
 ## Reglas de negocio
 ### Gestión de turnos
-- Un paciente no puede reservar dos turnos en el mismo horario.
 - Un médico no puede tener más de un turno asignado en el mismo horario.
 - Los turnos solo pueden reservarse en horarios disponibles del médico.
 - Un paciente puede cancelar el turno hasta el horario de la consulta.
